@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uttarakhand Tourist Planner - Plan Your Trip</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f39c12;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #c0daf5;
+            min-height: 100vh;
+            color: #474545;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: rgb(115, 99, 186);
+            position: relative;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: -10px;
+            left: 0;
+            background: rgba(255,255,255,0.2);
+            color: rgb(69, 67, 70);
+            padding: 12px 24px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.3);
+            font-weight: 500;
+        }
+
+        .back-btn:hover {
+            background: rgba(249, 243, 243, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .control-panel {
+            background: rgba(250, 251, 251, 0.95);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            backdrop-filter: blur(20px);
+            height: fit-content;
+            border: 1px solid rgba(255,255,255,0.3);
+            position: sticky;
+            top: 20px;
+        }
+
+        .control-panel h3 {
+            color: var(--primary);
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .map-container {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            backdrop-filter: blur(20px);
+            height: 700px;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #555;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e8ecf4;
+            border-radius: 15px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.9);
+            font-weight: 500;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            margin-bottom: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        .algorithm-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .algo-btn {
+            padding: 15px 20px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--primary);
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .algo-btn.active {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .algo-btn:hover:not(.active) {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .map-svg {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .destination {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .destination:hover {
+            filter: brightness(1.3) drop-shadow(0 0 10px rgba(255,255,255,0.8));
+            transform: scale(1.1);
+        }
+
+        .destination-info {
+            position: absolute;
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            max-width: 250px;
+        }
+
+        .stats-panel {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .stat-card h3 {
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+        }
+
+        .weather-panel {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .weather-panel h3 {
+            color: var(--primary);
+            font-size: 1.4em;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .weather-card {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(116, 185, 255, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .weather-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(116, 185, 255, 0.4);
+        }
+
+        .weather-card h4 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .weather-temp {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+
+        .route-display {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .route-display h3 {
+            color: var(--primary);
+            font-size: 1.4em;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .route-step {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            border-left: 6px solid var(--primary);
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .route-step:hover {
+            transform: translateX(10px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .route-step h4 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            font-weight: 700;
+        }
+
+        .route-step p {
+            margin: 8px 0;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .route-step strong {
+            color: var(--dark);
+        }
+
+        .connection-line {
+            stroke: var(--primary);
+            stroke-width: 2;
+            opacity: 0.6;
+        }
+
+        .path-line {
+            stroke: var(--danger);
+            stroke-width: 5;
+            fill: none;
+            stroke-dasharray: 10,10;
+            animation: dash 3s linear infinite;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -20;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            color: var(--primary);
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(39, 174, 96, 0.3);
+        }
+
+        .alert-danger {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-panel {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .algorithm-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .back-btn {
+                position: static;
+                margin-bottom: 20px;
+                width: fit-content;
+            }
+
+            .control-panel, .map-container {
+                padding: 20px;
+            }
+
+            .weather-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .control-panel, .map-container {
+                padding: 15px;
+                border-radius: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="index.html" class="back-btn">← Back to Home</a>
+            <h1>🏔️ Uttarakhand Tourism Planner</h1>
+            <p>Discover the beauty of Devbhoomi with AI-powered route planning</p>
+        </div>
+
+        <div class="main-content">
+            <div class="control-panel">
+                <h3>🗺️ Plan Your Journey</h3>
+                
+                <div class="form-group">
+                    <label>💰 Budget (₹)</label>
+                    <input type="number" id="budget" placeholder="Enter your budget" value="50000" min="1000" step="1000">
+                </div>
+
+                <div class="form-group">
+                    <label>📅 Start Date</label>
+                    <input type="date" id="startDate">
+                </div>
+
+                <div class="form-group">
+                    <label>📅 End Date</label>
+                    <input type="date" id="endDate">
+                </div>
+
+                <div class="form-group">
+                    <label>🚩 Starting Location</label>
+                    <select id="sourceLocation">
+                        <option value="dehradun">Dehradun</option>
+                        <option value="haridwar">Haridwar</option>
+                        <option value="rishikesh">Rishikesh</option>
+                        <option value="nainital">Nainital</option>
+                        <option value="mussoorie">Mussoorie</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>🎯 Preferred Destination Type</label>
+                    <select id="destinationType">
+                        <option value="all">All Types</option>
+                        <option value="hill-station">Hill Stations</option>
+                        <option value="religious">Religious Places</option>
+                        <option value="adventure">Adventure Sports</option>
+                        <option value="wildlife">Wildlife</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>🤖 Algorithm Selection</label>
+                    <div class="algorithm-selector">
+                        <div class="algo-btn active" data-algo="dijkstra">Dijkstra</div>
+                        <div class="algo-btn" data-algo="bfs">BFS</div>
+                        <div class="algo-btn" data-algo="dfs">DFS</div>
+                        <div class="algo-btn" data-algo="knapsack">Knapsack</div>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="planTrip()">🗺️ Plan My Trip</button>
+                <button class="btn" onclick="updateWeather()" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);">🌤️ Update Weather</button>
+                
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Planning your perfect trip...</p>
+                </div>
+            </div>
+
+            <div class="map-container">
+                <h3 style="margin-bottom: 20px; color: var(--primary); font-size: 1.4em; text-align: center;">🗺️ Uttarakhand Tourist Map</h3>
+                <svg class="map-svg" viewBox="0 0 800 600">
+                    <!-- Background -->
+                    <rect width="800" height="600" fill="#e8f4f8"/>
+                    
+                    <!-- Mountain ranges -->
+                    <polygon points="0,150 200,50 400,80 600,40 800,60 800,0 0,0" fill="#8fbc8f" opacity="0.6"/>
+                    <polygon points="0,250 150,180 350,200 550,160 750,180 800,150 800,0 0,0" fill="#90ee90" opacity="0.4"/>
+                    
+                    <!-- Rivers -->
+                    <path d="M100,400 Q200,350 300,380 Q400,410 500,390 Q600,370 700,400" stroke="#4682b4" stroke-width="3" fill="none"/>
+                    <path d="M50,300 Q150,280 250,300 Q350,320 450,310" stroke="#4682b4" stroke-width="2" fill="none"/>
+                    
+                    <!-- Tourist Destinations -->
+                    <g class="destination" data-name="Dehradun" data-type="city" data-cost="5000" data-days="2">
+                        <circle cx="200" cy="400" r="12" fill="#e74c3c"/>
+                        <text x="220" y="405" font-size="12" font-weight="bold">Dehradun</text>
+                    </g>
+                    
+                    <g class="destination" data-name="Mussoorie" data-type="hill-station" data-cost="8000" data-days="2">
+                        <circle cx="180" cy="350" r="10" fill="#f39c12"/>
+                        <text x="195" y="345" font-size="11">Mussoorie</text>
+                    </g>
+                    
+                    <g class="destination" data-name="Rishikesh" data-type="religious" data-cost="6000" data-days="2">
+                        <circle cx="220" cy="450" r="10" fill="#9b59b6"/>
+                        <text x="235" y="455" font-size="11">Rishikesh</text>
+                    </g>
+                    
+                    <g class="destination" data-name="Haridwar" data-type="religious" data-cost="4000" data-days="1">
+                        <circle cx="250" cy="480" r="10" fill="#9b59b6"/>
+                        <text x="265" y="485" font-size="11">Haridwar</text>
+                    </g>
+                    
+                    <g class="destination" data-name="Nainital" data-type="hill-station" data-cost="10000" data-days="3">
+                        <circle cx="400" cy="350" r="12" fill="#f39c12"/>
+                        <text x="420" y="355" font-size="12" font-weight="bold">Nainital</text>
+                    </g>
+                    
+                    <g class="destination" data-name="Jim Corbett" data-type="wildlife" data-cost="12000" data-days="2">
+                        <circle cx="350" cy="400" r="10" fill="#27ae60"/>
+                        <text x="365" y="405" font-size="11">Jim Corbett</text>
+                    </g>
+                    
+                    <g class="destination" data-name="Kedarnath" data-type="religious" data-cost="15000" data-days="3">
+                        <circle cx="300" cy="200" r="10" fill="#9b59b6"/>
+                        <text x="315" y="205" font-size="11">Kedarnath</text>
+                    </g>
+                    
+                    <g class="destination" data-name="Badrinath" data-type="religious" data-cost="16000" data-days="3">
+                        <circle cx="350" cy="150" r="10" fill="#9b59b6"/>
+                        <text x="365" y="155" font-size="11">Badrinath</text>
+                    </g>
+                    
+                    <g class="destination" data-name="Valley of Flowers" data-type="adventure" data-cost="18000" data-days="4">
+                        <circle cx="400" cy="120" r="10" fill="#e67e22"/>
+                        <text x="415" y="125" font-size="11">Valley of Flowers</text>
+                    </g>
+                    
+                    <g class="destination" data-name="Auli" data-type="adventure" data-cost="14000" data-days="3">
+                        <circle cx="450" cy="180" r="10" fill="#e67e22"/>
+                        <text x="465" y="185" font-size="11">Auli</text>
+                    </g>
+                    
+                    <g class="destination" data-name="Almora" data-type="hill-station" data-cost="9000" data-days="2">
+                        <circle cx="480" cy="320" r="10" fill="#f39c12"/>
+                        <text x="495" y="325" font-size="11">Almora</text>
+                    </g>
+                    
+                    <g class="destination" data-name="Kausani" data-type="hill-station" data-cost="8500" data-days="2">
+                        <circle cx="520" cy="280" r="10" fill="#f39c12"/>
+                        <text x="535" y="285" font-size="11">Kausani</text>
+                    </g>
+                    
+                    <g class="destination" data-name="Ranikhet" data-type="hill-station" data-cost="9500" data-days="2">
+                        <circle cx="460" cy="300" r="10" fill="#f39c12"/>
+                        <text x="475" y="305" font-size="11">Ranikhet</text>
+                    </g>
+                    
+                    <g class="destination" data-name="Chopta" data-type="adventure" data-cost="11000" data-days="2">
+                        <circle cx="320" cy="220" r="10" fill="#e67e22"/>
+                        <text x="335" y="225" font-size="11">Chopta</text>
+                    </g>
+                    
+                    <!-- Legend -->
+                    <g transform="translate(600, 450)">
+                        <rect x="0" y="0" width="180" height="130" fill="rgba(255,255,255,0.95)" stroke="#ccc" rx="10"/>
+                        <text x="10" y="20" font-size="14" font-weight="bold">Legend</text>
+                        <circle cx="20" cy="35" r="5" fill="#e74c3c"/>
+                        <text x="35" y="40" font-size="10">Major Cities</text>
+                        <circle cx="20" cy="50" r="5" fill="#f39c12"/>
+                        <text x="35" y="55" font-size="10">Hill Stations</text>
+                        <circle cx="20" cy="65" r="5" fill="#9b59b6"/>
+                        <text x="35" y="70" font-size="10">Religious Places</text>
+                        <circle cx="20" cy="80" r="5" fill="#e67e22"/>
+                        <text x="35" y="85" font-size="10">Adventure Sports</text>
+                        <circle cx="20" cy="95" r="5" fill="#27ae60"/>
+                        <text x="35" y="100" font-size="10">Wildlife</text>
+                        <line x1="20" y1="110" x2="40" y2="110" stroke="#667eea" stroke-width="2"/>
+                        <text x="45" y="115" font-size="10">Route Path</text>
+                    </g>
+                </svg>
+                <div class="destination-info" id="destinationInfo"></div>
+            </div>
+        </div>
+
+        <div class="stats-panel">
+            <div class="stat-card">
+                <h3 id="totalDestinations">14</h3>
+                <p>Tourist Destinations</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="totalDistance">0</h3>
+                <p>Total Distance (km)</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="totalCost">₹0</h3>
+                <p>Estimated Cost</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="totalDays">0</h3>
+                <p>Trip Duration (days)</p>
+            </div>
+        </div>
+
+        <div class="weather-panel">
+            <h3>🌤️ Current Weather Conditions</h3>
+            <div class="weather-grid" id="weatherGrid">
+                <!-- Weather cards will be populated here -->
+            </div>
+        </div>
+
+        <div class="route-display" id="routeDisplay" style="display: none;">
+            <h3>🗺️ Your Optimized Route</h3>
+            <div id="routeSteps"></div>
+        </div>
+    </div>
+
+    <script>
+        // Tourist destinations data
+        const destinations = {
+            'dehradun': { name: 'Dehradun', x: 200, y: 400, cost: 5000, days: 2, type: 'city' },
+            'mussoorie': { name: 'Mussoorie', x: 180, y: 350, cost: 8000, days: 2, type: 'hill-station' },
+            'rishikesh': { name: 'Rishikesh', x: 220, y: 450, cost: 6000, days: 2, type: 'religious' },
+            'haridwar': { name: 'Haridwar', x: 250, y: 480, cost: 4000, days: 1, type: 'religious' },
+            'nainital': { name: 'Nainital', x: 400, y: 350, cost: 10000, days: 3, type: 'hill-station' },
+            'jimcorbett': { name: 'Jim Corbett', x: 350, y: 400, cost: 12000, days: 2, type: 'wildlife' },
+            'kedarnath': { name: 'Kedarnath', x: 300, y: 200, cost: 15000, days: 3, type: 'religious' },
+            'badrinath': { name: 'Badrinath', x: 350, y: 150, cost: 16000, days: 3, type: 'religious' },
+            'valleyofflowers': { name: 'Valley of Flowers', x: 400, y: 120, cost: 18000, days: 4, type: 'adventure' },
+            'auli': { name: 'Auli', x: 450, y: 180, cost: 14000, days: 3, type: 'adventure' },
+            'almora': { name: 'Almora', x: 480, y: 320, cost: 9000, days: 2, type: 'hill-station' },
+            'kausani': { name: 'Kausani', x: 520, y: 280, cost: 8500, days: 2, type: 'hill-station' },
+            'ranikhet': { name: 'Ranikhet', x: 460, y: 300, cost: 9500, days: 2, type: 'hill-station' },
+            'chopta': { name: 'Chopta', x: 320, y: 220, cost: 11000, days: 2, type: 'adventure' }
+        };
+
+        // Distance matrix
+        const distanceMatrix = {
+            'dehradun': { 'mussoorie': 35, 'rishikesh': 45, 'haridwar': 52, 'nainital': 300, 'jimcorbett': 250 },
+            'mussoorie': { 'dehradun': 35, 'rishikesh': 70, 'nainital': 320, 'kedarnath': 200 },
+            'rishikesh': { 'dehradun': 45, 'mussoorie': 70, 'haridwar': 20, 'kedarnath': 220, 'badrinath': 300 },
+            'haridwar': { 'dehradun': 52, 'rishikesh': 20, 'jimcorbett': 150 },
+            'nainital': { 'dehradun': 300, 'mussoorie': 320, 'almora': 65, 'ranikhet': 60, 'kausani': 40 },
+            'jimcorbett': { 'dehradun': 250, 'haridwar': 150, 'nainital': 120, 'almora': 100 },
+            'kedarnath': { 'rishikesh': 220, 'mussoorie': 200, 'chopta': 30, 'badrinath': 100 },
+            'badrinath': { 'rishikesh': 300, 'kedarnath': 100, 'auli': 50, 'valleyofflowers': 40 },
+            'valleyofflowers': { 'badrinath': 40, 'auli': 30 },
+            'auli': { 'badrinath': 50, 'valleyofflowers': 30, 'chopta': 80 },
+            'almora': { 'nainital': 65, 'ranikhet': 25, 'kausani': 30, 'jimcorbett': 100 },
+            'kausani': { 'nainital': 40, 'almora': 30, 'ranikhet': 20 },
+            'ranikhet': { 'nainital': 60, 'almora': 25, 'kausani': 20 },
+            'chopta': { 'kedarnath': 30, 'auli': 80 }
+        };
+
+        let selectedAlgorithm = 'dijkstra';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEventListeners();
+            updateWeather();
+            drawConnections();
+            setDefaultDates();
+        });
+
+        function setDefaultDates() {
+            const today = new Date();
+            const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+            
+            document.getElementById('startDate').value = today.toISOString().split('T')[0];
+            document.getElementById('endDate').value = nextWeek.toISOString().split('T')[0];
+        }
+
+        function initializeEventListeners() {
+            // Algorithm selection
+            document.querySelectorAll('.algo-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.algo-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedAlgorithm = this.dataset.algo;
+                });
+            });
+
+            // Destination hover effects
+            document.querySelectorAll('.destination').forEach(dest => {
+                dest.addEventListener('mouseenter', showDestinationInfo);
+                dest.addEventListener('mouseleave', hideDestinationInfo);
+            });
+        }
+
+        function drawConnections() {
+            const svg = document.querySelector('.map-svg');
+            const connectionsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            connectionsGroup.setAttribute('class', 'connections');
+            
+            for (let source in distanceMatrix) {
+                for (let dest in distanceMatrix[source]) {
+                    if (destinations[source] && destinations[dest]) {
+                        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        line.setAttribute('x1', destinations[source].x);
+                        line.setAttribute('y1', destinations[source].y);
+                        line.setAttribute('x2', destinations[dest].x);
+                        line.setAttribute('y2', destinations[dest].y);
+                        line.setAttribute('class', 'connection-line');
+                        connectionsGroup.appendChild(line);
+                    }
+                }
+            }
+            
+            svg.insertBefore(connectionsGroup, svg.firstChild);
+        }
+
+        function showDestinationInfo(event) {
+            const info = document.getElementById('destinationInfo');
+            const name = event.currentTarget.dataset.name;
+            const type = event.currentTarget.dataset.type;
+            const cost = event.currentTarget.dataset.cost;
+            const days = event.currentTarget.dataset.days;
+            
+            info.innerHTML = `
+                <div style="font-weight: 700; font-size: 16px; margin-bottom: 8px;">${name}</div>
+                <div><strong>Type:</strong> ${type.replace('-', ' ').toUpperCase()}</div>
+                <div><strong>Cost:</strong> ₹${parseInt(cost).toLocaleString()}</div>
+                <div><strong>Duration:</strong> ${days} day${days > 1 ? 's' : ''}</div>
+            `;
+            
+            info.style.display = 'block';
+            info.style.left = Math.min(event.pageX + 15, window.innerWidth - 260) + 'px';
+            info.style.top = event.pageY - 80 + 'px';
+        }
+
+        function hideDestinationInfo() {
+            document.getElementById('destinationInfo').style.display = 'none';
+        }
+
+        // Algorithms Implementation
+        function dijkstraAlgorithm(source, budget, days, destinationType) {
+            const visited = new Set();
+            const route = [];
+            let totalCost = 0;
+            let remainingDays = days;
+            let current = source;
+            
+            while (remainingDays > 0 && visited.size < Object.keys(destinations).length) {
+                visited.add(current);
+                
+                if (current !== source) {
+                    const dest = destinations[current];
+                    if (totalCost + dest.cost <= budget && remainingDays >= dest.days) {
+                        if (destinationType === 'all' || dest.type === destinationType) {
+                            route.push({
+                                destination: dest.name,
+                                cost: dest.cost,
+                                days: dest.days,
+                                type: dest.type
+                            });
+                            totalCost += dest.cost;
+                            remainingDays -= dest.days;
+                        }
+                    }
+                }
+                
+                let minDistance = Infinity;
+                let nextDest = null;
+                
+                if (distanceMatrix[current]) {
+                    for (let neighbor in distanceMatrix[current]) {
+                        if (!visited.has(neighbor)) {
+                            const distance = distanceMatrix[current][neighbor];
+                            if (distance < minDistance) {
+                                minDistance = distance;
+                                nextDest = neighbor;
+                            }
+                        }
+                    }
+                }
+                
+                if (!nextDest) break;
+                current = nextDest;
+            }
+            
+            return { route, totalCost, totalDistance: calculateTotalDistance(route, source) };
+        }
+
+        function bfsAlgorithm(source, budget, days, destinationType) {
+            const queue = [source];
+            const visited = new Set();
+            const route = [];
+            let totalCost = 0;
+            let remainingDays = days;
+            
+            while (queue.length > 0 && remainingDays > 0) {
+                const current = queue.shift();
+                
+                if (visited.has(current)) continue;
+                visited.add(current);
+                
+                if (current !== source) {
+                    const dest = destinations[current];
+                    if (totalCost + dest.cost <= budget && remainingDays >= dest.days) {
+                        if (destinationType === 'all' || dest.type === destinationType) {
+                            route.push({
+                                destination: dest.name,
+                                cost: dest.cost,
+                                days: dest.days,
+                                type: dest.type
+                            });
+                            totalCost += dest.cost;
+                            remainingDays -= dest.days;
+                        }
+                    }
+                }
+                
+                if (distanceMatrix[current]) {
+                    for (let neighbor in distanceMatrix[current]) {
+                        if (!visited.has(neighbor)) {
+                            queue.push(neighbor);
+                        }
+                    }
+                }
+            }
+            
+            return { route, totalCost, totalDistance: calculateTotalDistance(route, source) };
+        }
+
+        function dfsAlgorithm(source, budget, days, destinationType) {
+            const stack = [source];
+            const visited = new Set();
+            const route = [];
+            let totalCost = 0;
+            let remainingDays = days;
+            
+            while (stack.length > 0 && remainingDays > 0) {
+                const current = stack.pop();
+                
+                if (visited.has(current)) continue;
+                visited.add(current);
+                
+                if (current !== source) {
+                    const dest = destinations[current];
+                    if (totalCost + dest.cost <= budget && remainingDays >= dest.days) {
+                        if (destinationType === 'all' || dest.type === destinationType) {
+                            route.push({
+                                destination: dest.name,
+                                cost: dest.cost,
+                                days: dest.days,
+                                type: dest.type
+                            });
+                            totalCost += dest.cost;
+                            remainingDays -= dest.days;
+                        }
+                    }
+                }
+                
+                if (distanceMatrix[current]) {
+                    const neighbors = Object.keys(distanceMatrix[current]).reverse();
+                    for (let neighbor of neighbors) {
+                        if (!visited.has(neighbor)) {
+                            stack.push(neighbor);
+                        }
+                    }
+                }
+            }
+            
+            return { route, totalCost, totalDistance: calculateTotalDistance(route, source) };
+        }
+
+        function knapsackAlgorithm(source, budget, days, destinationType) {
+            let availableDestinations = Object.entries(destinations)
+                .filter(([key, dest]) => {
+                    return key !== source && 
+                           (destinationType === 'all' || dest.type === destinationType) &&
+                           dest.cost <= budget && dest.days <= days;
+                })
+                .map(([key, dest]) => ({ ...dest, key }));
+
+            const n = availableDestinations.length;
+            if (n === 0) return { route: [], totalCost: 0, totalDistance: 0 };
+
+            const dp = Array(n + 1).fill(null).map(() => Array(budget + 1).fill(0));
+            const daysDp = Array(n + 1).fill(null).map(() => Array(budget + 1).fill(0));
+            
+            for (let i = 1; i <= n; i++) {
+                const dest = availableDestinations[i - 1];
+                for (let w = 0; w <= budget; w++) {
+                    if (dest.cost <= w && daysDp[i-1][w-dest.cost] + dest.days <= days) {
+                        const includeValue = dp[i-1][w-dest.cost] + (dest.days * 1000 - dest.cost);
+                        if (includeValue > dp[i-1][w]) {
+                            dp[i][w] = includeValue;
+                            daysDp[i][w] = daysDp[i-1][w-dest.cost] + dest.days;
+                        } else {
+                            dp[i][w] = dp[i-1][w];
+                            daysDp[i][w] = daysDp[i-1][w];
+                        }
+                    } else {
+                        dp[i][w] = dp[i-1][w];
+                        daysDp[i][w] = daysDp[i-1][w];
+                    }
+                }
+            }
+            
+            const route = [];
+            let w = budget;
+            let totalCost = 0;
+            
+            for (let i = n; i > 0 && w > 0; i--) {
+                if (dp[i][w] !== dp[i-1][w]) {
+                    const dest = availableDestinations[i-1];
+                    route.push({
+                        destination: dest.name,
+                        cost: dest.cost,
+                        days: dest.days,
+                        type: dest.type
+                    });
+                    totalCost += dest.cost;
+                    w -= dest.cost;
+                }
+            }
+            
+            return { route: route.reverse(), totalCost, totalDistance: calculateTotalDistance(route, source) };
+        }
+
+        function calculateTotalDistance(route, source) {
+            if (route.length === 0) return 0;
+            
+            let totalDistance = 0;
+            let previous = source;
+            
+            for (let step of route) {
+                const current = step.destination.toLowerCase()
+                    .replace(/\s+/g, '')
+                    .replace('jimcorbett', 'jimcorbett')
+                    .replace('valleyofflowers', 'valleyofflowers');
+                
+                if (distanceMatrix[previous] && distanceMatrix[previous][current]) {
+                    totalDistance += distanceMatrix[previous][current];
+                } else if (distanceMatrix[current] && distanceMatrix[current][previous]) {
+                    totalDistance += distanceMatrix[current][previous];
+                } else {
+                    totalDistance += 100; // Default distance
+                }
+                previous = current;
+            }
+            
+            return totalDistance;
+        }
+
+        function planTrip() {
+            const budget = parseInt(document.getElementById('budget').value);
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const source = document.getElementById('sourceLocation').value;
+            const destinationType = document.getElementById('destinationType').value;
+            
+            // Validation
+            if (!budget || budget <= 0) {
+                showAlert('Please enter a valid budget (minimum ₹1,000)', 'danger');
+                return;
+            }
+            
+            if (!startDate || !endDate) {
+                showAlert('Please select both start and end dates', 'danger');
+                return;
+            }
+            
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+            
+            if (days <= 0) {
+                showAlert('End date must be after start date', 'danger');
+                return;
+            }
+
+            if (days > 30) {
+                showAlert('Trip duration cannot exceed 30 days', 'danger');
+                return;
+            }
+            
+            // Show loading
+            document.getElementById('loading').classList.add('show');
+            
+            // Simulate processing time
+            setTimeout(() => {
+                try {
+                    let result;
+                    
+                    switch (selectedAlgorithm) {
+                        case 'dijkstra':
+                            result = dijkstraAlgorithm(source, budget, days, destinationType);
+                            break;
+                        case 'bfs':
+                            result = bfsAlgorithm(source, budget, days, destinationType);
+                            break;
+                        case 'dfs':
+                            result = dfsAlgorithm(source, budget, days, destinationType);
+                            break;
+                        case 'knapsack':
+                            result = knapsackAlgorithm(source, budget, days, destinationType);
+                            break;
+                        default:
+                            result = dijkstraAlgorithm(source, budget, days, destinationType);
+                    }
+                    
+                    displayRoute(result.route, source);
+                    updateStats(result.totalDistance, result.totalCost, days);
+                    drawRoutePath(result.route, source);
+                    
+                    showAlert(`Trip planned successfully using ${selectedAlgorithm.toUpperCase()} algorithm!`, 'success');
+                    document.getElementById('routeDisplay').scrollIntoView({ behavior: 'smooth' });
+                    
+                } catch (error) {
+                    console.error('Error planning trip:', error);
+                    showAlert('Error planning trip. Please check your inputs and try again.', 'danger');
+                } finally {
+                    document.getElementById('loading').classList.remove('show');
+                }
+            }, 1500);
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            const container = document.querySelector('.control-panel');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        function displayRoute(route, source) {
+            const routeDisplay = document.getElementById('routeDisplay');
+            const routeSteps = document.getElementById('routeSteps');
+            
+            if (route.length === 0) {
+                routeSteps.innerHTML = `
+                    <div class="route-step">
+                        <h4>🚫 No suitable destinations found</h4>
+                        <p>Try adjusting your preferences:</p>
+                        <div style="margin-top: 15px;">
+                            <p><strong>• Increase budget</strong> to at least ₹15,000</p>
+                            <p><strong>• Extend trip duration</strong> to 5+ days</p>
+                            <p><strong>• Select "All Types"</strong> for destination type</p>
+                            <p><strong>• Try different algorithms</strong> for varied results</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                let html = `<div class="route-step">
+                    <h4>🏁 Starting Point</h4>
+                    <p><strong>Location:</strong> ${destinations[source].name}</p>
+                    <p>Begin your incredible journey through the Land of Gods from ${destinations[source].name}</p>
+                </div>`;
+                
+                let dayCounter = 1;
+                route.forEach((step, index) => {
+                    html += `<div class="route-step">
+                        <h4>📍 ${step.destination} (Days ${dayCounter}-${dayCounter + step.days - 1})</h4>
+                        <p><strong>Type:</strong> ${step.type.charAt(0).toUpperCase() + step.type.slice(1).replace('-', ' ')}</p>
+                        <p><strong>Duration:</strong> ${step.days} day${step.days > 1 ? 's' : ''}</p>
+                        <p><strong>Cost:</strong> ₹${step.cost.toLocaleString()}</p>
+                        <p><strong>Activities:</strong> ${getActivities(step.type)}</p>
+                    </div>`;
+                    dayCounter += step.days;
+                });
+                
+                routeSteps.innerHTML = html;
+            }
+            
+            routeDisplay.style.display = 'block';
+        }
+
+        function getActivities(type) {
+            const activities = {
+                'hill-station': 'Sightseeing, Nature walks, Photography, Local cuisine, Cable car rides, Shopping',
+                'religious': 'Temple visits, Spiritual activities, Evening aarti, Meditation, Pilgrimage walks',
+                'adventure': 'Trekking, River rafting, Skiing, Rock climbing, Paragliding, Camping',
+                'wildlife': 'Safari, Bird watching, Nature trails, Wildlife photography, Jungle walks',
+                'city': 'Urban exploration, Shopping, Cultural sites, Museums, Local markets, Food tours'
+            };
+            return activities[type] || 'Exploration and sightseeing';
+        }
+
+        function updateStats(distance, cost, days) {
+            document.getElementById('totalDistance').textContent = distance;
+            document.getElementById('totalCost').textContent = `₹${cost.toLocaleString()}`;
+            document.getElementById('totalDays').textContent = days;
+        }
+
+        function drawRoutePath(route, source) {
+            const existingPath = document.querySelector('.route-path');
+            if (existingPath) existingPath.remove();
+            
+            if (route.length === 0) return;
+            
+            const svg = document.querySelector('.map-svg');
+            const pathGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            pathGroup.setAttribute('class', 'route-path');
+            
+            let pathData = `M ${destinations[source].x} ${destinations[source].y}`;
+            
+            route.forEach(step => {
+                const destKey = step.destination.toLowerCase()
+                    .replace(/\s+/g, '')
+                    .replace('jimcorbett', 'jimcorbett')
+                    .replace('valleyofflowers', 'valleyofflowers');
+                    
+                if (destinations[destKey]) {
+                    pathData += ` L ${destinations[destKey].x} ${destinations[destKey].y}`;
+                }
+            });
+            
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', pathData);
+            path.setAttribute('class', 'path-line');
+            pathGroup.appendChild(path);
+            
+            svg.appendChild(pathGroup);
+        }
+
+        function updateWeather() {
+            const weatherLocations = [
+                { name: 'Dehradun', temp: 28, condition: 'Sunny', humidity: 65, icon: '☀️' },
+                { name: 'Mussoorie', temp: 22, condition: 'Pleasant', humidity: 70, icon: '🌤️' },
+                { name: 'Nainital', temp: 20, condition: 'Cloudy', humidity: 75, icon: '☁️' },
+                { name: 'Rishikesh', temp: 30, condition: 'Clear', humidity: 60, icon: '🌞' },
+                { name: 'Haridwar', temp: 32, condition: 'Hot', humidity: 55, icon: '🌡️' },
+                { name: 'Kedarnath', temp: 15, condition: 'Cold', humidity: 80, icon: '❄️' },
+                { name: 'Badrinath', temp: 12, condition: 'Very Cold', humidity: 85, icon: '🏔️' },
+                { name: 'Auli', temp: 18, condition: 'Pleasant', humidity: 70, icon: '🎿' }
+            ];
+            
+            const weatherGrid = document.getElementById('weatherGrid');
+            weatherGrid.innerHTML = '';
+            
+            weatherLocations.forEach(location => {
+                const weatherCard = document.createElement('div');
+                weatherCard.className = 'weather-card';
+                weatherCard.innerHTML = `
+                    <h4>${location.icon} ${location.name}</h4>
+                    <div class="weather-temp">${location.temp}°C</div>
+                    <p style="font-weight: 600; margin-bottom: 5px;">${location.condition}</p>
+                    <p style="opacity: 0.8;">Humidity: ${location.humidity}%</p>
+                `;
+                weatherGrid.appendChild(weatherCard);
+            });
+        }
+    </script>
+</body>
+</html>
